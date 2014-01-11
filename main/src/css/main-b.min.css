@@ -1,0 +1,7 @@
+body{margin:0;}
+#header{height:55px;border-bottom:1px solid #555;}
+#main-body{width:100%;}
+#header .box{width:1020px;margin:0 auto;}
+#main-body .center{width:1020px;margin:44px auto auto auto;}
+.navgations{width:200px;height:710px;background-color:#273133;float:left;}
+.contents{width:818px;height:708px;float:left;border:1px solid #E2E2E0;}
