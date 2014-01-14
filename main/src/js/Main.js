@@ -51,7 +51,7 @@ Main.prototype.initialize = function()
 */
 Main.prototype.tick = function(event)
 {
-	this.mainStage.update();s
+	this.mainStage.update(); 
 }
 
 /**
