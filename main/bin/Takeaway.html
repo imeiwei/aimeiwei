@@ -9,8 +9,6 @@
 	<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
 	<script src="..\src\js\common.js"></script>
 	<script src="..\src\js\main-b.js"></script>
-	<script src="..\src\numkeybord\numkeybord.js"></script>
-	<link href="..\src\numkeybord\numkeybord.min.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
 <div id="header">
@@ -55,17 +53,14 @@
 				<h4 class="tit6">外送设置</h4>
 				<div class="form-body">
 					<table class="form-table" cellpadding="0" cellspacing="0" border="0">
-						<tr><td class="keys">商户名称:</td><td class="values"><input class="b-name-input" type="input" /></td></tr>
-						<tr><td>地　　址:</td><td class="values"><select><option value="111">上海浦东新区</option></select><input class="b-sdr-input margin-l-little" type="input" /></td></tr>
-						<tr><td>主打菜系:</td><td class="values"><select><option value="111">港式茶餐厅</option></select><a id="addSelectItem" class="margin-l-little" href="javascript:void(0)">没有你要的选项？</a></td></tr>
-						<tr><td>服务电话:</td><td class="values add-phones"><input type="text" class="b-phone-input" id="phone01" name="phone01" /><a id="addPhone" class="margin-l-little" href="javascript:void(0)">增加</a></td></tr>
-					</table>
-					<script>
-					$(function(){
-					   $("#phone01").numkeybord();
+						<tr><td class="keys">支持设置:</td><td class="values">
+							<input id="isTake0" class="radios" name="isTake" type="radio" value="0" checked="checked" /><label for="isTake0">不支持</label>
+							<input style="margin-left:30px;" id="isTake1" class="radios" name="isTake" type="radio" value="1" /><label for="isTake1">支持</label>
+						</td></tr>
+						<tr><td>外送范围:</td><td class="values"><select><option value="111">方圆三公里</option></select></td></tr>
+						<tr><td>外送条件:</td><td class="values">订单满<input type="text" class="b-money-input" id="moneyInfo" name="moneyInfo" />元</td></tr>
 						
-					});
-					</script>
+					</table>
 					<input id="submiter" type="button" name="submiter" class="submiter" value="保存" />
 				</div>
 			</div>
