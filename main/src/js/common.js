@@ -2,19 +2,26 @@
  * ...
  * @author 
  */
- var amw = {};;
+var amw = function(){};
+	amw.extend=function(c,d){
+		for(var e in d){c[e]=d[e]}
+		return c;
+	};
+ /*tips组件*/
 (function() {
-	var a = amw;
+	var _a = amw;
 	/*tips*/
-	var tips = function(width,height){
-		o = this;
+	var tips = function(width,height,isShowGrow){
+		var o = this;
 		o.width = width;
 		o.height = height;
-		
+		o.isShowGrow = typeof isShowGrow == 'undefined'?true:isShowGrow;
 		o.htmlStr = '<div id="tips-addphone" class="float-tips" style="width:'+width+'px;height:'+height+'px;">';
 		o.htmlStr += '<div class="contenter">sss</div>';
 		o.htmlStr += '<div class="close"></div>';
-		o.htmlStr += '<b class="up"></b>';
+		if(o.isShowGrow){
+			o.htmlStr += '<b class="up"></b>';
+		}
 		o.htmlStr += '</div>';
 		
 		o.border = $(this.htmlStr);
@@ -29,16 +36,16 @@
 		height:100,
 		has:false,
 		isShow:false,
-		_EventHander:function(){
+		_EventHander:function(e){
+			var o = e.data.theThis;
 			o.hide();
-			console.log(1);
 		},
 		setContent:function(obj){
-			o = this;
+			var o = this;
 			o.contenter.html(obj);
 		},
 		show:function(x,y){
-			o = this;
+			var o = this;
 			o.border.css("left",x).css("top",y);
 			if(!o.has){
 				$("body").append(o.border);
@@ -48,12 +55,12 @@
 			if(!o.isShow){
 				o.border.show();
 				//绑定事件
-				$(window).resize(o._EventHander);
+				$(window).resize({theThis:o},o._EventHander);
 				o.isShow = true;
 			}
 		},
 		hide:function(){
-			o = this;
+			var o = this;
 			if(o.isShow){
 				o.border.hide();
 				//移除事件
@@ -62,8 +69,7 @@
 			}
 		}
 	};
-	//a.tips = tips;
-	
+	_a.tips = tips;
 	/*tips - 输入自定义选项*/
 	var tipsCustomInput = function(width,height){
 		this.tips = new tips(width,height);
@@ -74,14 +80,67 @@
 	};
 	tipsCustomInput.prototype = {
 		show:function(x,y){
-			o = this;
+			var o = this;
 			o.tips.show(x,y);
 		},
 		hide:function(){
-			o = this;
+			var o = this;
 			o.tips.hide();
 		}
 	};
-	a.tipsCustomInput = tipsCustomInput;
-	//console.log(tipsCustomInput);
+	_a.tipsCustomInput = tipsCustomInput;
+	
+	/*tips - 输入时间控件*/
+	var tipsTimeInput = function(width,height){
+		this.tips = new tips(width,height);
+		//加入内部表单
+		var formHtml = '<input type="text" class="b-time-input" id="timeInput" name="timeInput" /><span class="maohao">:</span><input type="text" class="b-time-input" id="timeInput" name="timeInput" /><br/><br/>';
+			formHtml += '<input type="button" name="submit-addCustom" class="submit-addCustom submit-mix" value="确定" />';
+		this.tips.setContent(formHtml);
+	};
+	tipsTimeInput.prototype = {
+		show:function(x,y){
+			var o = this;
+			o.tips.show(x,y);
+		},
+		hide:function(){
+			var o = this;
+			o.tips.hide();
+		}
+	};
+	_a.tipsTimeInput = tipsTimeInput;
+})();
+
+/*tabs组件*/
+(function() {
+	var tabs = function(tabsClassSeletor,tabContentClassSeletor,activeClassName){
+		this.init(tabsClassSeletor,tabContentClassSeletor,activeClassName);
+	};
+	tabs.prototype = {
+		nowNum:0,
+		init:function(a,b,c){
+			var o = this;
+			o.tabsClassSeletor = a;
+			o.tabContentClassSeletor = b;
+			o.activeClassName = c;
+			$(o.tabsClassSeletor).click(function(){
+				o.setActive($(this).index());
+			});
+			o.setActive(0);
+		},
+		setActive:function(num){
+			var o = this;
+			if(num == o.nowNum)return;
+			$(o.tabsClassSeletor).each(function(){
+				$(this).removeClass(o.activeClassName);
+			});
+			$(o.tabsClassSeletor).eq(num).addClass(o.activeClassName);
+			$(o.tabContentClassSeletor).each(function(){
+				$(this).hide();
+			});
+			$(o.tabContentClassSeletor).eq(num).show();
+			o.nowNum = num;
+		}
+	};
+	amw.tabs = tabs;
 })();

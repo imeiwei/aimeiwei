@@ -60,3 +60,22 @@ Main.prototype.tick = function(event)
 window.Main = Main;
 
 })();
+
+
+var test = function(w){
+    //this.name = w;
+    this.init(w);
+};
+
+test.prototype = {
+    name:'',
+    init:function(n){
+        this.name = n;
+    }
+}; 
+
+var u1 = new test('111');
+var u2 = new test('222');
+
+console.log(u1.name);
+console.log(u2.name);
