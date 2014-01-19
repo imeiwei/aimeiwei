@@ -1,7 +1,9 @@
 body 
 {
     background-image:url(img/bg-login-page.jpg);background-position:top center;
+	background-color:#000;
 }
+#header{display:none;}
 #main-body
 {
 	width:915px; height:600px;margin:60px auto auto auto;
