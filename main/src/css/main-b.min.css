@@ -104,14 +104,31 @@ a:hover{text-decoration:underline;}
 #weekTabs .weekItem{background-color:#FFFFFF;border-bottom:1px solid #DCDADB;color:#999999;height:43px;line-height:43px;text-align:center;}
 #weekTabs .weekTabContent{border:1px solid #DCDADB;float:left;height:500px;width:604px;}
 #weekTabs .weekItem span{display:block;background-color:#F7F7F7;cursor:pointer;}
-#weekTabs .active2 span{background-color:#FFFFFF;display:block;position:relative;right:-1px;}
+#weekTabs .active2 span{background-color:#FFFFFF;display:block;position:relative;right:-1px;color:#333333;}
+#weekTabs .caiListUl .teHuiTit{font-size:14px;height:27px;line-height:27px;text-align:center;}
 #weekTabs .caiListUl{float:none;width:auto;border-left:none;border-top:none;}
 #weekTabs .caiListUl li{border:1px solid #DCDADB;float:left;height:174px;margin:28px 0 0 28px;width:162px;}
-#weekTabs .caiListUl .teHuiTit{font-size:14px;height:27px;line-height:27px;text-align:center;}
 #weekTabs .caiListUl .teHuiPic{}
 #weekTabs .caiListUl .teHuiPic img{display:block;margin:0 auto;}
 #weekTabs .caiListUl p{font-size:12px;line-height:19px;padding:3px 10px 0;}
 #weekTabs .caiListUl .prePrice{color:#999999;display:block;text-decoration:line-through;}
 #weekTabs .caiListUl .tePrice{color:#FF0000;}
 #weekTabs .caiListUl .addCai{background:url("img/addicon.jpg") no-repeat scroll center center #F7F7F7;display:block;height:162px;margin:6px auto auto auto;width:150px;}
-
+.form-body .radioBase{height:auto;}
+.margin-r-little{margin-right:12px;margin-left:4px;}
+.b-price-input{width:100px;}
+#caiTabs{padding-top:0px;}
+#caiTabs ul{width:114px;float:left;border-left:1px solid #DCDADB;border-top:1px solid #DCDADB;}
+#caiTabs .weekItem{background-color:#FFFFFF;border-bottom:1px solid #DCDADB;color:#999999;height:43px;line-height:43px;text-align:center;}
+#caiTabs .weekTabContent{border-left:1px solid #DCDADB;float:left;height:500px;width:604px;}
+#caiTabs .weekItem span{display:block;background-color:#F7F7F7;cursor:pointer;}
+#caiTabs .active2 span{background-color:#FFFFFF;display:block;position:relative;right:-1px;color:#5F8E0C;}
+#caiTabs .caiListUl{float:none;width:auto;border-left:none;border-top:none;}
+#caiTabs .caiListUl li{float:left;height:160px;margin:0 0 0px 36px;width:165px;}
+#caiTabs .caiListUl .teHuiPic{}
+#caiTabs .caiListUl .teHuiPic img{display:block;margin:0 auto;width:165px;height:114px;}
+#caiTabs .caiListUl p{font-size:12px;line-height:19px;padding:3px 10px 0;}
+#caiTabs .caiListUl .prePrice{color:#FF0000;display:block;float:right;}
+#caiTabs .caiListUl .tePrice{color:#333;}
+#caiTabs .caiListUl .addCai{background:url("img/addicon.jpg") no-repeat scroll center center #F7F7F7;display:block;height:162px;margin:6px auto auto auto;width:150px;}
+#caiTabs .active2{padding-left:3px;background-color:#86BD21;}
