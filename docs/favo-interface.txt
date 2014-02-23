@@ -1,0 +1,29 @@
+--收藏接口
+---取值enum表
+参见minishop/utils/constants/constants.py
+---服务接口
+****************************************************************************************************
+----查询收藏列表
+     url: http://api.aimeiwei.cc/usershopfavo
+   param: 参数如下:
+         -1- 'type', 取值为'list'
+         -2- 'pageno', 翻页，不填则默认为0
+         -3- 'i_user_id'，用户id
+  method: get
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+          当且仅当'retcode'=0时，'retbody'才存在, retbody是一个list，list中每个元素的格式如下：
+         -01- 'i_user_id', 用户id
+         -02- 'j_shop_id', 商户id
+         -03- 'i_creat_time', 创建时间
+----查询收藏关系
+     url: http://api.aimeiwei.cc/usershopfavo
+   param: 参数如下:
+         -1- 'type', 取值为'relation'
+         -2- 'i_user_id'，用户id
+         -3- 'i_shop_id'，商户id
+  method: get
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+          当且仅当'retcode'=0时，'retbody'才存在, retbody是一个dict，dict中每个元素的格式如下：
+         -01- 'i_user_id', 用户id
+         -02- 'j_shop_id', 商户id
+         -03- 'i_creat_time', 创建时间

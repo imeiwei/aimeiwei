@@ -1,0 +1,204 @@
+--店铺接口
+---取值enum表
+参见minishop/utils/constants/constants.py
+----店铺列表接口
+     url: http://api.aimeiwei.cc/shop
+   param: 参数如下:
+         -1- 'type', 取值为'list'
+         -2- 'pageno', 翻页，不填则为0
+  method: get
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+          当且仅当'retcode'=0时，'retbody'才存在, retbody是一个list，list中每个元素的格式如下：
+          -01- 's_image', 店铺首图
+          -02- 'j_promotion', 店铺促销信息，json的key-value嵌套结构，schema见promotion_type.txt文件
+          -03- 's_addr', 店铺地址信息
+          -04- 'j_detail', 店铺详情信息，json的key-value嵌套结构，schema见detail_type.txt文件
+          -05- 'i_id', 店铺id
+          -06- 'j_tags', 店铺的标签列表，如['川菜', '粤菜', '本帮菜']
+          -07- 'j_tags', 店铺的标签列表，如['川菜', '粤菜', '本帮菜']
+          -08- 's_name', 店铺名称
+          -09- 'i_ding_count', 店铺被赞的次数
+          -10- 'i_boss_id', 店铺的管理者id
+          -11- 'i_type', 目前不用关注，只有吃饭的类型，将来可能把饮料店加入
+          -12- 'i_status', 店铺状态
+          -13- 'i_favo_count', 店铺被收藏次数
+----店铺详情接口
+     url: http://api.aimeiwei.cc/shop
+   param: 参数如下:
+         -1- 'type', 取值为'info'
+         -2- 'i_id', 店铺id
+  method: get
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+          当且仅当'retcode'=0时，'retbody'才存在, retbody是一个dict，dict中每个元素的格式如下：
+          -01- 's_image', 店铺首图
+          -02- 'j_promotion', 店铺促销信息，json的key-value嵌套结构，schema见promotion_type.txt文件
+          -03- 's_addr', 店铺地址信息
+          -04- 'j_detail', 店铺详情信息，json的key-value嵌套结构，schema见detail_type.txt文件
+          -05- 'i_id', 店铺id
+          -06- 'j_tags', 店铺的标签列表，如['川菜', '粤菜', '本帮菜']
+          -07- 'j_tags', 店铺的标签列表，如['川菜', '粤菜', '本帮菜']
+          -08- 's_name', 店铺名称
+          -09- 'i_ding_count', 店铺被赞的次数
+          -10- 'i_boss_id', 店铺的管理者id
+          -11- 'i_type', 目前不用关注，只有吃饭的类型，将来可能把饮料店加入
+          -12- 'i_status', 店铺状态
+          -13- 'i_favo_count', 店铺被收藏次数
+----店铺促销信息接口
+     url: http://api.aimeiwei.cc/shop
+   param: 参数如下:
+         -1- 'type', 取值为'promotion'
+         -2- 'i_id', 店铺id
+  method: get
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+          当且仅当'retcode'=0时，'retbody'才存在, retbody是一个dict，dict中每个元素的格式如下：
+          -01- 'j_promotion', 店铺促销信息，json的key-value嵌套结构，schema还需确定
+----赞扬店铺接口
+     url: http://api.aimeiwei.cc/shop
+   param: 参数如下:
+         -1- 'type', 取值为'insert'
+         -2- 'i_id', 店铺id
+         -3- 'i_uid', 选填，当用户登录后，可以填入用户的uid
+         -4- 's_uname', 选填，用户登录后，可以填入用户的uname
+  method: post
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+          当且仅当'retcode'=0时，'retbody'才存在, retbody是一个dict，dict中每个元素的格式如下：
+         -01- E_SHOP_NOT_EXIST 店铺不存在
+----收藏店铺接口
+     url: http://api.aimeiwei.cc/shop
+   param: 参数如下:
+         -1- 'type', 取值为'favo'
+         -2- 'i_shop_id', 店铺id
+         -3- 'i_user_id', 用户id
+         -4- 'op', 操作，只能为 'favo' 或者 'unfavo'，其他值为非法
+  method: post
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+  errors: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- E_PARAM_ERROR 可能有op的字段取值不是favo or unfavo所致
+         -02- E_SHOP_NOT_EXIST 店铺不存在
+----添加店铺接口
+     url: http://api.aimeiwei.cc/shop
+   param: 参数如下:
+         -01- 'type',         取值为'insert'
+         -02- 's_name',       必填，店铺名称
+         -03- 'j_detail',     选填，店铺详情，key-value结构，格式待定
+         -04- 'j_tel_number', 必填，店铺的电话号码，格式为 json.dumps(['021-88888888','021-77777777'])
+         -05- 'j_promotion',  选填，店铺的促销信息，key-value结构，格式待定
+         -06- 'i_take_out',   必填，店铺是否支持外卖
+         -07- 'i_boss_uid',   必填，店铺的所有者，开始的时候有我们创建，然后可以移交给商家。
+         -08- 'j_tags',       必填，店铺的标签，格式如 json.dumps(['川菜', '粤菜', '本帮菜'])
+         -09- 's_addr',       必填，店铺的地址
+         -10- 's_image',      必填，店铺的首图
+  method: post
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+  errors: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- E_DUP_CONTENT, 用户提交了重复的店名
+----更新店铺接口
+     url: http://api.aimeiwei.cc/shop
+   param: 参数如下:
+         -01- 'type',         取值为'update'
+         -02- 'i_id',         必填，店铺id
+         -03- 'i_boss_uid',   必填，操作者uid
+         -04- 's_name',       选填，店铺名称
+         -05- 'i_status',     选填，店铺状态
+         -06- 'j_detail',     选填，店铺详情，key-value结构，格式待定
+         -07- 'j_tel_number', 选填，店铺的电话号码，格式为 json.dumps(['021-88888888','021-77777777'])
+         -08- 'j_promotion',  选填，店铺的促销信息，key-value结构，格式待定
+         -09- 'i_take_out',   选填，店铺是否支持外卖
+         -10- 'j_tags',       选填，店铺的标签，格式如 json.dumps(['川菜', '粤菜', '本帮菜'])
+         -11- 's_addr',       选填，店铺的地址
+         -12- 's_image',      选填，店铺的首图
+         -13- 选填的必须至少存在一个，否则不会触发更新行为。
+  method: post
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+  errors: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- E_SHOP_NOT_EXIST, 店铺不存在
+         -02- E_NO_PERMISSION，用户无权限
+----添加特价菜接口
+     url: http://api.aimeiwei.cc/shop
+   param: 参数如下:
+         -01- 'type',         取值为'promotion'
+         -02- 'i_id',         必填，店铺id
+         -03- 'i_boss_uid',   必填，操作者uid
+         -04- 'subtype',      必填，promotion的子类型，添加特价菜的subtype='t_tejia'
+         -05- 'op',           必填，取值为add，表示操作类型，只有两种，分别为'add'和'del'
+         -06- 'i_service_id', 必填，特价菜的id
+         -07- 'i_price',      必填，特价菜的新价格，新价格应该比老价格低。
+  method: post
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+  errors: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- E_SHOP_NOT_EXIST, 店铺不存在
+         -02- E_NO_PERMISSION，用户无权限
+         -03- E_SERVICE_NOT_EXIST, 菜品不存在
+         -04- E_SHOP_PROMOTION_TEJIA_PRICE, 特价菜的新价格比老价格还高。。
+         -05- E_SHOP_PROMOTION_TEJIA_TOOMANY, 特价菜设置过多，最多4个。
+         -06- E_PARAM_ERROR, op字段不是add或del。
+----删除特价菜接口
+     url: http://api.aimeiwei.cc/shop
+   param: 参数如下:
+         -01- 'type',         取值为'promotion'
+         -02- 'i_id',         必填，店铺id
+         -03- 'i_boss_uid',   必填，操作者uid
+         -04- 'subtype',      必填，promotion的子类型，特价菜的subtype='t_tejia'
+         -05- 'op',           必填，取值del，表示操作类型，只有两种，分别为'add'和'del'
+         -06- 'i_service_id', 必填，特价菜的id
+  method: post
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+  errors: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- E_SHOP_NOT_EXIST, 店铺不存在
+         -02- E_NO_PERMISSION，用户无权限
+         -03- E_SERVICE_NOT_EXIST, 菜品不存在
+         -04- E_PARAM_ERROR, op字段不是add或del。
+         -05- E_SHOP_PROMOTION_TEJIA_NOT_EXIST, 删除时，发现此特价菜不在列表中
+----添加套餐接口
+     url: http://api.aimeiwei.cc/shop
+   param: 参数如下:
+         -01- 'type',           取值为'promotion'
+         -02- 'i_id',           必填，店铺id
+         -03- 'i_boss_uid',     必填，操作者uid
+         -04- 'subtype',        必填，promotion的子类型，套餐的subtype='t_taocan'
+         -05- 'op',             必填，取值为add，表示操作类型，只有两种，分别为'add'和'del'
+         -06- 'id_list',        必填，套餐的id列表，使用'_'连接，如1_2_3，表示菜品id:1,2,3组成了套餐
+         -07- 'i_taocan_price', 必填，套餐总价
+         -08- 'i_taocan_name',  必填，套餐名称，如照烧狠大鸡腿套餐
+         -09- 'i_taocan_desc',  选填，套餐描述，如三荤两素一汤, 可为空
+  method: post
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+  errors: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- E_SHOP_NOT_EXIST, 店铺不存在
+         -02- E_NO_PERMISSION，用户无权限
+         -03- E_SERVICE_NOT_EXIST, 某些菜品不存在
+         -04- E_SHOP_PROMOTION_TAOCAN_PRICE, 套餐的总价格比原组合价格还高。。
+         -05- E_SHOP_PROMOTION_TAOCAN_TOOMANY, 套餐设置过多，最多8个。
+         -06- E_PARAM_ERROR, op字段不是add或del。
+         -07- E_SHOP_PROMOTION_TAOCAN_ID_EMPTY, 套餐的id列表为空
+----删除套餐接口
+     url: http://api.aimeiwei.cc/shop
+   param: 参数如下:
+         -01- 'type',         取值为'promotion'
+         -02- 'i_id',         必填，店铺id
+         -03- 'i_boss_uid',   必填，操作者uid
+         -04- 'subtype',      必填，promotion的子类型，套餐的subtype='t_taocan'
+         -05- 'op',           必填，取值del，表示操作类型，只有两种，分别为'add'和'del'
+         -06- 'id_list',      必填，套餐的id列表
+  method: post
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+  errors: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- E_SHOP_NOT_EXIST, 店铺不存在
+         -02- E_NO_PERMISSION，用户无权限
+         -03- E_PARAM_ERROR, op字段不是add或del。
+         -04- E_SHOP_PROMOTION_TAOCAN_NOT_EXIST, 删除时，发现此套餐不在列表中
+----促销的其他接口
+     url: http://api.aimeiwei.cc/shop
+   param: 参数如下:
+         -01- 'type',         取值为'promotion'
+         -02- 'i_id',         必填，店铺id
+         -03- 'i_boss_uid',   必填，操作者uid
+         -04- 'subtype',      必填，promotion的子类型，其他的subtype='t_others'
+         -05- 'dict_json',    必填，其他促销信息序列化后的json字符串, 如json.dumps({'t_card':'blabla', 't_zhekou''blabla'})
+  method: post
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+  errors: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- E_SHOP_NOT_EXIST, 店铺不存在
+         -02- E_NO_PERMISSION，用户无权限
+         -03- E_PARAM_ERROR, op字段不是add或del。
+         -04- E_JSON_ERROR, dict_json字段是非法的json

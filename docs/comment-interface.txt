@@ -1,0 +1,60 @@
+--评论接口
+---取值enum表
+参见minishop/utils/constants/constants.py
+---服务接口
+----查询评论列表
+     url: http://api.aimeiwei.cc/comment
+   param: 参数如下:
+         -1- 'type', 取值为'list'
+         -2- 'pageno', 翻页，不填则默认为0
+         -3- 'i_shop_id'，商户id
+  method: get
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+          当且仅当'retcode'=0时，'retbody'才存在, retbody是一个list，list中每个元素的格式如下：
+         -01- 'i_cmt_uid', 评论人的uid
+         -02- 's_cmt_uname', 评论人的uname
+         -03- 'i_creat_time', 评论创建时间
+         -04- 'i_status', 评论的状态，0为正常，1为删除
+         -05- 'i_star',  评论的星级
+         -06- 'j_detail', json嵌套结构
+                          # 'reply'     -> 回复的内容
+                          # 'cmt'       -> 被引用的内容
+                          # 'cmt_uid'   -> 被引用的用户id
+                          # 'cmt_uname' -> 被引用的用户名
+         -07- 'i_cmt_id', 评论的id
+         -08- 'i_shop_id', 评论所属的饭店shop_ip
+         -09- 'i_order_id', 评论关联的订单，如果没有关联的话，值为0
+         -10- 'i_ding_count', 该评论被赞的次数
+----创建评论
+     url: http://api.aimeiwei.cc/comment
+   param: 参数如下:
+         -01- 'type', 取值为'insert'
+         -02- 'i_uid', 订单创建者的uid，
+         -03- 'i_shop_id', 订单的所属商家
+         -04- 'i_take_out', 是否是外卖订单
+         -05- 'j_detail', json嵌套结构，内部结构有两个字段, 'service_list'是一个菜品id的数组，'message'为给商家的留言
+  method: post
+response: json结构，{'retcode':$number, 'message':$string}，
+   error: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- 暂无
+----赞扬评论
+     url: http://api.aimeiwei.cc/comment
+   param: 参数如下:
+         -01- 'type', 取值为'ding'
+         -02- 'i_cmt_id', 评论id
+         -03- 'i_shop_id', 店铺id
+  method: post
+response: json结构，{'retcode':$number, 'message':$string}，
+   error: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- E_DUP_OPERATION 重复点赞
+----删除评论
+     url: http://api.aimeiwei.cc/comment
+   param: 参数如下:
+         -01- 'type', 取值为'delete'
+         -02- 'i_shop_id', 饭店id
+         -03- 'i_uid', 操作人的uid
+         -04- 'i_cmt_id', 评论的id
+  method: post
+response: json结构，{'retcode':$number, 'message':$string}，
+   error: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- E_NO_PERMISSION, 用户无权限操作此评论

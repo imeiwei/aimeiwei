@@ -1,0 +1,9 @@
+--枚举值接口
+----菜品类型枚举值接口
+http://api.aimeiwei.cc/enum?type=foodtype
+----菜品推荐枚举值接口
+http://api.aimeiwei.cc/enum?type=recommand
+----饭店菜系枚举值接口
+http://api.aimeiwei.cc/enum?type=cuisine
+----菜品口味枚举值接口
+http://api.aimeiwei.cc/enum?type=taste

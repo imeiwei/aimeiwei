@@ -1,0 +1,117 @@
+--订单接口
+---取值enum表
+参见minishop/utils/constants/constants.py
+---服务接口
+----查询订单列表
+     url: http://api.aimeiwei.cc/order
+   param: 参数如下:
+         -1- 'type', 取值为'list'
+         -2- 'pageno', 翻页，不填则默认为0
+         -3- 'i_shop_id'，商户id
+         -4- 'i_uid'，用户id，注意，i_shop_id和i_uid必须只能设置某一个非0，不能全为0，不能全不为0.
+  method: get
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+          当且仅当'retcode'=0时，'retbody'才存在, retbody是一个list，list中每个元素的格式如下：
+         -01- 'i_check_time', 表示订单确认时间，默认填0值，商家确认后填写确认时间，unix时间戳。
+         -02- 'i_uid', 订单创建者的uid，
+         -03- 'i_creat_time', 表示订单创建时间
+         -04- 'i_status', 表示订单的状态，取值参见订单状态的enum表
+         -05- 'i_all_price',  表示订单的总金额
+         -06- 'j_detail', json嵌套结构，内部结构有两个字段, 'service_list'是一个菜品id的数组，'message'为给商家的留言
+         -07- 'i_id', 订单的id
+         -08- 'i_check_uid', 确认订单的店小二id，一个商家可能有多个店小二，这个功能接口上还未实现，目前填写店铺的boss_id
+         -09- 'i_shop_id', 订单的所属商家
+         -10- 'i_take_out', 是否是外卖订单
+----查询单个订单
+     url: http://api.aimeiwei.cc/order
+   param: 参数如下:
+         -1- 'type', 取值为'info'
+         -4- 'i_id'，订单id
+  method: get
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+          当且仅当'retcode'=0时，'retbody'才存在, 当i_id不存在时，retbody是一个空的{}
+         -01- 'i_check_time', 表示订单确认时间，默认填0值，商家确认后填写确认时间，unix时间戳。
+         -02- 'i_uid', 订单创建者的uid，
+         -03- 'i_creat_time', 表示订单创建时间
+         -04- 'i_status', 表示订单的状态，取值参见订单状态的enum表
+         -05- 'i_all_price',  表示订单的总金额
+         -06- 'j_detail', json嵌套结构，内部结构有两个字段, 'service_list'是一个菜品id的数组，'message'为给商家的留言
+         -07- 'i_id', 订单的id
+         -08- 'i_check_uid', 确认订单的店小二id，一个商家可能有多个店小二，这个功能接口上还未实现，目前填写店铺的boss_id
+         -09- 'i_shop_id', 订单的所属商家
+         -10- 'i_take_out', 是否是外卖订单
+----创建订单
+     url: http://api.aimeiwei.cc/order
+   param: 参数如下:
+         -01- 'type', 取值为'insert'
+         -02- 'i_uid', 订单创建者的uid，
+         -03- 'i_shop_id', 订单的所属商家
+         -04- 'i_take_out', 是否是外卖订单
+         -05- 'j_detail', json嵌套结构，内部结构有两个字段, 'service_list'是一个菜品id的数组，'message'为给商家的留言
+  method: post
+response: json结构，{'retcode':$number, 'message':$string}，
+   error: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- E_SHOP_NOT_EXIST, 店铺不存在
+         -02- E_ORDER_SELF2SELF，店主给自己下订单
+         -03- E_JSON_INVALID，j_detail的json格式不对
+         -04- E_PARAM_ERROR，j_detail中service_list不存在或者长度为0
+----更新订单
+     url: http://api.aimeiwei.cc/order
+   param: 参数如下:
+         -01- 'type', 取值为'update'
+         -02- 'i_id', 订单id
+         -03- 'i_uid', 用户id
+         -04- 'i_shop_id', 店铺id
+         -05- 仅支持'i_take_out', 'j_detail'两个字段的更新，字段格式与insert接口一致
+  method: post
+response: json结构，{'retcode':$number, 'message':$string}，
+   error: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- E_ORDER_NOT_EXIST, 订单不存在
+         -02- E_ORDER_STATUS_ACCEPTED，订单已经确认，无法修改
+         -03- E_ORDER_STATUS_CANCELED，订单已经取消，无法修改
+         -04- E_ORDER_STATUS_FINISHED，订单已经完成，无法修改
+         -05- E_JSON_INVALID，j_detail的json格式不对
+         -06- E_PARAM_ERROR，j_detail中service_list不存在或者长度为0
+         -07- E_NO_PERMISSION, 用户不是订单的创建者，无权限操作此订单
+----确认订单
+     url: http://api.aimeiwei.cc/order
+   param: 参数如下:
+         -01- 'type', 取值为'accept'
+         -02- 'i_id', 订单id
+         -03- 'i_uid', 商户uid
+         -04- 's_uname', 商户的uname
+  method: post
+response: json结构，{'retcode':$number, 'message':$string}，
+   error: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- E_ORDER_NOT_EXIST, 订单不存在
+         -02- E_ORDER_STATUS_NOT_CREATE, 仅当订单状态为CREATE时，才可以确认
+         -03- E_NO_PERMISSION, 用户不是商户老板，无权限操作此订单
+----取消订单
+     url: http://api.aimeiwei.cc/order
+   param: 参数如下:
+         -01- 'type', 取值为'cancel'
+         -02- 'i_id', 订单id
+         -03- 'i_uid', 用户id, 亦可以是boos的uid
+         -04- 's_uname', 用户uname或者是商户的uname
+  method: post
+response: json结构，{'retcode':$number, 'message':$string}，
+   error: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- E_ORDER_NOT_EXIST, 订单不存在
+         -02- E_ORDER_STATUS_CANCELED, 订单已经是取消状态
+         -03- E_NO_PERMISSION, 用户不是商户老板也不是订单创建者，无权限操作此订单
+         -04- E_ORDER_STATUS_NOT_CREATE, 订单创建者仅能取消CREATE状态的订单
+         -05- E_ORDER_STATUS_FINISHED，商户不能取消已经完成的订单
+----完成订单
+     url: http://api.aimeiwei.cc/order
+   param: 参数如下:
+         -01- 'type', 取值为'cancel'
+         -02- 'i_id', 订单id
+         -03- 'i_uid', 用户id
+         -04- 's_uname', 用户名称
+  method: post
+response: json结构，{'retcode':$number, 'message':$string}，
+   error: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- E_ORDER_NOT_EXIST, 订单不存在
+         -03- E_NO_PERMISSION, 用户不是商户老板也不是订单创建者，无权限操作此订单
+         -04- E_ORDER_STATUS_NOT_ACCEPT, 仅当订单是ACCEPT状态才可以转为FINISH
+         -05- E_ORDER_STATUS_FINISHED，商户不能取消已经完成的订单

@@ -1,0 +1,92 @@
+--消息接口
+---取值enum表
+参见minishop/utils/constants/constants.py
+---服务接口
+----查询消息列表
+     url: http://api.aimeiwei.cc/message
+   param: 参数如下:
+         -1- 'type', 取值为'list'
+         -2- 'pageno', 翻页，不填则默认为0
+         -3- 'i_uid'，用户id
+  method: get
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+          当且仅当'retcode'=0时，'retbody'才存在, retbody是一个list，list中每个元素的格式如下：
+         -01- 'i_recv_uid',   收件人的uid
+         -02- 'i_send_uid',   发件人的uid
+         -03- 'i_creat_time', 消息创建时间
+         -04- 'i_type',       消息类型
+         -05- 'j_detail',     json嵌套结构，j_detail格式取决于消息类型
+         -06- 's_send_uname', 发件人的uname
+         -07- 'i_message_id', 消息的id
+         -08- 'i_has_read',   消息是否已读，已读为1，未读为0
+
+----查询单个消息
+     url: http://api.aimeiwei.cc/message
+   param: 参数如下:
+         -1- 'type', 取值为'info'
+         -2- 'i_msg_id', 消息的id
+         -3- 'i_uid'，用户id
+  method: get
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+          当且仅当'retcode'=0时，'retbody'才存在, retbody是一个dict，dict中每个元素的格式如下：
+         -01- 'i_recv_uid',   收件人的uid
+         -02- 'i_send_uid',   发件人的uid
+         -03- 'i_creat_time', 消息创建时间
+         -04- 'i_type',       消息类型
+         -05- 'j_detail',     json嵌套结构，j_detail格式取决于消息类型
+         -06- 's_send_uname', 发件人的uname
+         -07- 'i_message_id', 消息的id
+         -08- 'i_has_read',   消息是否已读，已读为1，未读为0
+----查询消息计数
+     url: http://api.aimeiwei.cc/message
+   param: 参数如下:
+         -01- 'type', 取值为'count'
+         -02- 'i_uid', 登录用户的uid，
+  method: get
+response: json结构，{'retcode':$number, 'message':$string, 'retbody':$json}，
+          当且仅当'retcode'=0时，'retbody'才存在, retbody是一个dict，dict中每个元素的格式如下：
+         -01- 'i_recv_uid',     收件人的uid
+         -02- 'i_all_count',    收件箱的总消息数
+         -03- 'i_unread_count', 未读消息计数
+
+----清除未读消息计数
+     url: http://api.aimeiwei.cc/message
+   param: 参数如下:
+         -01- 'type', 取值为'clear'
+         -02- 'i_uid', 用户id
+  method: post
+response: json结构，{'retcode':$number, 'message':$string}，
+   error: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- 暂无，一般会清理成功
+----删除评论
+     url: http://api.aimeiwei.cc/message
+   param: 参数如下:
+         -01- 'type', 取值为'delete'
+         -03- 'i_uid', 操作人的uid
+         -04- 'i_msg_id', 消息的id
+  method: post
+response: json结构，{'retcode':$number, 'message':$string}，
+   error: retcode存在几种异常情况，可以给用户明确的提示:
+         -01- 暂无，一般会清理成功
+--------------------------------------------------------------------------------------
+消息类型与j_detail的格式对应
+--------------------------------------------------------------------------------------
+-1- 消息类型=T_SHOP_DING
+表示用户对某个用户点了赞，仅在用户登录后，才会产生消息，不然没有发件人。。
+j_detail的schema为{}，这是一个空的json。
+
+-2- 消息类型=T_ORDER_CREATE or T_ORDER_UPDATE
+用户创建或更新订单，发送消息通知店主。
+j_detail的格式就是订单的全部字段，参见查询单个订单的输出格式
+
+-3- 消息类型=T_ORDER_ACCEPT
+商户确认订单，消息通知用户
+j_detail的格式就是订单的全部字段，参见查询单个订单的输出格式
+
+-4- 消息类型=T_ORDER_CANCEL
+商户或用户取消订单，发消息通知对方
+j_detail的格式就是订单的全部字段，参见查询单个订单的输出格式
+
+-5- 消息类型=T_ORDER_FINISH
+用户完成订单，发消息通知商户
+j_detail的格式就是订单的全部字段，参见查询单个订单的输出格式
